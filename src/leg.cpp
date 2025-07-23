@@ -1,18 +1,18 @@
 #include "leg.h"
 #include <Arduino.h>
 
-Leg::Leg(int hipPin, int shoulderPin, int kneePin)
+Leg::Leg(float l1, float l2, float l3, int hipPin, int shoulderPin, int kneePin)
+    : ik(l1, l2, l3), hipPin(hipPin), shoulderPin(shoulderPin), kneePin(kneePin)
 {
-    _hipPin = hipPin;
-    _shoulderPin = shoulderPin;
-    _kneePin = kneePin;
-}
-void Leg::printPins()
-{
-    Serial.print("Hip Pin: ");
-    Serial.println(_hipPin);
-    Serial.print("Shoulder Pin: ");
-    Serial.println(_shoulderPin);
-    Serial.print("Knee Pin: ");
-    Serial.println(_kneePin);
+    // hipServo.attach(hipPin);
+    // shoulderServo.attach(shoulderPin);
+    // kneeServo.attach(kneePin);
+};
+
+void Leg::moveTo(float x, float y, float z) {
+    JointAngles angles = ik.calculateIK(x, y, z);
+
+    Serial.println(angles.j1);
+    Serial.println(angles.j2); 
+    Serial.println(angles.j3);
 }
