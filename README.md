@@ -1,5 +1,3 @@
-I will be uploading my progress and finalized code for my quadruped project./n
-/n
-Hardware:/n 
-1x esp32 devkit/n
-12x mg996r servo motors/n
+<h1>Quadruped-V1</h1>
+<h3>A cheap, open source 3d printed robotic dog</h3>
+<h5>Created by Aidan Prentice</h5>
