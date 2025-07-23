@@ -14,10 +14,25 @@ JointAngles IKController::calculateIK(float x, float y, float z)
     JointAngles angles;
 
     float B = sqrt(x * x + y * y + z * z);
-    float t1 = asin((sin(DEG_TO_RAD * 90) * l1) / B);
+    Serial.println("B: ");
+    Serial.println(B);
+
+    float t1 = asin(l1 / B);
+    Serial.println("t1: ");
+    Serial.println(t1);
+
     float t2 = 90 - t1;
+    Serial.println("t2: ");
+    Serial.println(t2);
+    if (t2 < 0)
+    {
+        t2 = 0; // Prevent negative angles
+    }
     float A = (sin(t2) * B) / sin(DEG_TO_RAD * 90);
-    float j3 = acos(((A * A) - (l2 * l2) - (l3 * l3)) / -2 * l2 * l3);
+    Serial.println("A: ");
+    Serial.println(A);
+
+    float j3 = acos((l2 * l2 + l3 * l3 - A * A) / (2 * l2 * l3));
     float j2 = asin((sin(j3) * l2) / A);
     float j1 = atan2(y, x);
     angles.j1 = RAD_TO_DEG * j1;
