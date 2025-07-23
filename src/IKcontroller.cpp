@@ -13,38 +13,50 @@ JointAngles IKController::calculateIK(float x, float y, float z)
 {
     JointAngles angles;
 
-    float B = sqrt(x * x + y * y + z * z);
-    Serial.println("B: ");
-    Serial.println(B);
-
-    float t1 = asin(l1 / B);
-    Serial.println("t1: ");
-    Serial.println(t1);
-
-    float t2 = 90 - t1;
-    Serial.println("t2: ");
-    Serial.println(t2);
-    if (t2 < 0)
-    {
-        t2 = 0; // Prevent negative angles
-    }
-    float A = (sin(t2) * B) / sin(DEG_TO_RAD * 90);
-    Serial.println("A: ");
-    Serial.println(A);
-
-    float j3 = acos((l2 * l2 + l3 * l3 - A * A) / (2 * l2 * l3));
-    float j2 = asin((sin(j3) * l2) / A);
-    float j1 = atan2(y, x);
+    // Hip angle (j1): rotate to face the foot position
+    float j1 = atan2(y, x); // angle in radians
     angles.j1 = RAD_TO_DEG * j1;
-    angles.j2 = RAD_TO_DEG * j2;
-    angles.j3 = RAD_TO_DEG * j3;
 
-    // if (B> (sqrt(l1*l1 + (l2+l3)*(l2+l3)))) {
-    //     angles.j1 = 90;
-    //     angles.j2 = 90;
-    //     angles.j3 = 90;
-    //     Serial.println("Target is unreachable");
-    // }
+    // Shoulder frame: project foot position into hip-facing plane
+    float hipToFoot = sqrt(x * x + y * y);
+    float shoulderX = hipToFoot - l1; // from shoulder joint to foot, in xz plane
+    float shoulderZ = -z;             // if z is downward
+
+    // Distance from shoulder to foot
+    float dist = sqrt(shoulderX * shoulderX + shoulderZ * shoulderZ);
+
+    // Clamp distance to avoid NaN in acos
+    float maxReach = l2 + l3 - 0.001;
+    if (dist > maxReach)
+        dist = maxReach;
+
+    // Law of cosines
+    float angleKnee = acos((l2 * l2 + l3 * l3 - dist * dist) / (2 * l2 * l3));
+    float angleShoulder = acos((l2 * l2 + dist * dist - l3 * l3) / (2 * l2 * dist));
+    float angleOffset = atan2(shoulderZ, shoulderX);
+
+    float j2 = angleOffset + angleShoulder;
+    float j3 = angleKnee;
+    Serial.println("j3: " + String(RAD_TO_DEG * j3));
+
+    angles.j2 = RAD_TO_DEG * j2;
+    angles.j3 = RAD_TO_DEG * angleKnee;
+
+    // Debug
+    Serial.println("---- IK Debug ----");
+    Serial.print("Input (x,y,z): ");
+    Serial.print(x);
+    Serial.print(", ");
+    Serial.print(y);
+    Serial.print(", ");
+    Serial.println(z);
+    Serial.print("j1: ");
+    Serial.println(angles.j1);
+    Serial.print("j2: ");
+    Serial.println(angles.j2);
+    Serial.print("j3: ");
+    Serial.println(angles.j3);
+    Serial.println("------------------");
 
     return angles;
 }
