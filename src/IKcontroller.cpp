@@ -37,26 +37,9 @@ JointAngles IKController::calculateIK(float x, float y, float z)
 
     float j2 = angleOffset + angleShoulder;
     float j3 = angleKnee;
-    Serial.println("j3: " + String(RAD_TO_DEG * j3));
 
     angles.j2 = RAD_TO_DEG * j2;
     angles.j3 = RAD_TO_DEG * angleKnee;
-
-    // Debug
-    Serial.println("---- IK Debug ----");
-    Serial.print("Input (x,y,z): ");
-    Serial.print(x);
-    Serial.print(", ");
-    Serial.print(y);
-    Serial.print(", ");
-    Serial.println(z);
-    Serial.print("j1: ");
-    Serial.println(angles.j1);
-    Serial.print("j2: ");
-    Serial.println(angles.j2);
-    Serial.print("j3: ");
-    Serial.println(angles.j3);
-    Serial.println("------------------");
 
     return angles;
 }
@@ -70,12 +53,4 @@ void IKController::moveTo(float x, float y, float z)
     // servo1.write(angles.j1);
     // servo2.write(angles.j2);
     // servo3.write(angles.j3);
-
-    Serial.print("Moving to: ");
-    Serial.print("J1: ");
-    Serial.print(angles.j1);
-    Serial.print(", J2: ");
-    Serial.print(angles.j2);
-    Serial.print(", J3: ");
-    Serial.println(angles.j3);
 }

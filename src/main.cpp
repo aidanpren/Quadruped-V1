@@ -9,9 +9,11 @@ Leg backLeft(40.6, 140, 140, 7, 8, 9);
 Leg backRight(40.6, 140, 140, 10, 11, 12);
 
 GaitController gaitController;
-IKController ikController;
+// Replace the following line with the correct constructor arguments for IKController.
+// For example, if IKController requires three float parameters:
+IKController ikController(40.6, 140, 140);
 
-Leg legControllers[4] = { frontLeft, frontRight, backLeft, backRight };
+Leg legControllers[4] = {frontLeft, frontRight, backLeft, backRight};
 
 void setup()
 {
@@ -21,14 +23,27 @@ void setup()
     frontLeft.moveTo(0, 40.6, -280.0);
 }
 
-void loop() {
+void loop()
+{
     gaitController.update();
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         Vec3 pos = gaitController.getFootTarget(i);
         JointAngles angles = ikController.calculateIK(pos.x, pos.y, pos.z);
         legControllers[i].moveTo(angles.j1, angles.j2, angles.j3);
+        if (i == 2) // Example for debugging only the third leg
+        {
+            Serial.print("Leg ");
+            Serial.print(i);
+            Serial.print(" target position: x=");
+            Serial.print(pos.x);
+            Serial.print(", y=");
+            Serial.print(pos.y);
+            Serial.print(", z=");
+            Serial.println(pos.z);
+        }
     };
 
-        delay(100); // Adjust delay as needed for smoother movement
+    delay(100); // Adjust delay as needed for smoother movement
 }
