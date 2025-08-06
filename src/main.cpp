@@ -21,29 +21,30 @@ void setup()
     delay(1000);
 
     frontLeft.moveTo(0, 40.6, -280.0);
+    Serial.println("Front Left Leg Moved");
 }
 
 void loop()
 {
-    gaitController.update();
+    // gaitController.update();
 
-    for (int i = 0; i < 4; i++)
-    {
-        Vec3 pos = gaitController.getFootTarget(i);
-        JointAngles angles = ikController.calculateIK(pos.x, pos.y, pos.z);
-        legControllers[i].moveTo(angles.j1, angles.j2, angles.j3);
-        if (i == 2) // Example for debugging only the third leg
-        {
-            Serial.print("Leg ");
-            Serial.print(i);
-            Serial.print(" target position: x=");
-            Serial.print(pos.x);
-            Serial.print(", y=");
-            Serial.print(pos.y);
-            Serial.print(", z=");
-            Serial.println(pos.z);
-        }
-    };
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     Vec3 pos = gaitController.getFootTarget(i);
+    //     JointAngles angles = ikController.calculateIK(pos.x, pos.y, pos.z);
+    //     legControllers[i].moveTo(angles.j1, angles.j2, angles.j3);
+    //     if (i == 2) // Example for debugging only the third leg
+    //     {
+    //         Serial.print("Leg ");
+    //         Serial.print(i);
+    //         Serial.print(" target position: x=");
+    //         Serial.print(pos.x);
+    //         Serial.print(", y=");
+    //         Serial.print(pos.y);
+    //         Serial.print(", z=");
+    //         Serial.println(pos.z);
+    //     }
+    // };
 
-    delay(100); // Adjust delay as needed for smoother movement
+    // delay(100); // Adjust delay as needed for smoother movement
 }

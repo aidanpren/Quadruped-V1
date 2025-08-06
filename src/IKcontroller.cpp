@@ -14,8 +14,8 @@ JointAngles IKController::calculateIK(float x, float y, float z)
     JointAngles angles;
 
     // Hip angle (j1): rotate to face the foot position
-    float j1 = atan2(y, x); // angle in radians
-    angles.j1 = RAD_TO_DEG * j1;
+    float j1 = atan2(y-40.6, -z); // angle in radians
+    angles.j1 = 90 + (RAD_TO_DEG * j1);
 
     // Shoulder frame: project foot position into hip-facing plane
     float hipToFoot = sqrt(x * x + y * y);
@@ -47,10 +47,11 @@ JointAngles IKController::calculateIK(float x, float y, float z)
 void IKController::moveTo(float x, float y, float z)
 {
     JointAngles angles = calculateIK(x, y, z);
+    Serial.print(angles.j1);
+    Serial.print(", ");
+    Serial.print(angles.j2);
+    Serial.print(", ");
+    Serial.println(angles.j3);
 
-    // Here you would typically send the angles to the servos
-    // For example:
-    // servo1.write(angles.j1);
-    // servo2.write(angles.j2);
-    // servo3.write(angles.j3);
+    // Write servos here
 }

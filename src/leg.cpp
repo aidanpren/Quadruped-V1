@@ -11,4 +11,9 @@ Leg::Leg(float l1, float l2, float l3, int hipPin, int shoulderPin, int kneePin)
 void Leg::moveTo(float x, float y, float z)
 {
     JointAngles angles = ik.calculateIK(x, y, z);
+    Serial.print(angles.j1);
+    Serial.print(", ");
+    Serial.print(angles.j2);
+    Serial.print(", ");
+    Serial.println(angles.j3);
 }
